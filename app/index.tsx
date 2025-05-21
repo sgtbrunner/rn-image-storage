@@ -1,15 +1,22 @@
-import { Text, View } from "react-native";
+import { ThemedText } from '@/components/ThemedText';
+import { ThemedView } from '@/components/ThemedView';
+import { Link } from 'expo-router';
 
 export default function Index() {
+
+
   return (
-    <View
+    <ThemedView
       style={{
         flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: 'center',
+        alignItems: 'center',
       }}
     >
-      <Text>Edit app/index.tsx to edit this screen.</Text>
-    </View>
+      <ThemedText>Edit app/index.tsx to edit this screen.</ThemedText>
+      <Link href='/details'>
+        <ThemedText type='link'>Go to details screen!</ThemedText>
+      </Link>
+    </ThemedView>
   );
 }
