@@ -1,7 +1,9 @@
+import { BLUR_HASH } from '@/constants';
 import { useImages } from '@/store/hooks/images';
+import { ImageBackground } from 'expo-image';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
-import { ImageBackground, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 type ImageDetailsProps = {
   /** Id of the displayed image */
@@ -22,6 +24,8 @@ export default function ImageDetails() {
   return (
     <ImageBackground
       style={styles.image}
+      cachePolicy='memory-disk'
+      placeholder={{ blurhash: BLUR_HASH }}
       source={{ uri: image?.download_url }}
     />
   );
