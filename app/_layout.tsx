@@ -23,6 +23,7 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+      <StatusBar style='auto' />
       <Stack>
         <Stack.Screen
           name='index'
@@ -31,14 +32,12 @@ export default function RootLayout() {
         <Stack.Screen
           name='details'
           options={{
-            headerTitle: 'Image details',
             headerTitleAlign: 'center',
             headerBackTitle: 'Back',
           }}
         />
-        <Stack.Screen name='+not-found' options={{ headerShown: false}} />
+        <Stack.Screen name='+not-found' options={{ headerShown: false }} />
       </Stack>
-      <StatusBar style='auto' />
     </ThemeProvider>
   );
 }
