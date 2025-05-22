@@ -1,7 +1,7 @@
+import { useImages } from '@/store/hooks/images';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
-import { IMAGES } from '../constants/Images';
-import { StyleSheet, ImageBackground } from 'react-native';
 import { useEffect } from 'react';
+import { ImageBackground, StyleSheet } from 'react-native';
 
 type ImageDetailsProps = {
   /** Id of the displayed image */
@@ -9,9 +9,11 @@ type ImageDetailsProps = {
 };
 
 export default function ImageDetails() {
-  const { id } = useLocalSearchParams<'/details', ImageDetailsProps>();
+  const { getImage } = useImages();
   const navigation = useNavigation();
-  const image = IMAGES.find((image) => image.id === id);
+  const { id } = useLocalSearchParams<'/details', ImageDetailsProps>();
+
+  const image = getImage(id);
 
   useEffect(() => {
     navigation.setOptions({ title: image?.author });

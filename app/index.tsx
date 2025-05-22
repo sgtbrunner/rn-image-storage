@@ -1,40 +1,39 @@
-import { useCallback, useEffect } from 'react';
-import {
-  StyleSheet,
-  Dimensions,
-  View,
-  Alert,
-  RefreshControl,
-} from 'react-native';
-import { FlashList } from '@shopify/flash-list';
 import { GalleryImageItem } from '@/components/GalleryImageItem';
 import { withLoading } from '@/components/Loading';
-import { useQuery } from '@tanstack/react-query';
-import { getImagesQueryFunction, imagesQueryKey } from '@/queries/get-images';
-import { ImageProps } from '@/types';
 import {
-  ERROR_ALERT_MESSAGE,
-  ERROR_ALERT_TITLE,
-  LIMIT,
-  ONE_HOUR,
-} from '../constants';
+  getImagesQueryFunction,
+  GetImagesQueryFunctionError,
+  GetImagesQueryFunctionResponse,
+  imagesQueryKey,
+} from '@/queries/get-images';
+import { useImages } from '@/store/hooks/images';
+import { ImageItem } from '@/store/slices/images';
+import { FlashList } from '@shopify/flash-list';
+import { useQuery } from '@tanstack/react-query';
+import { useCallback, useEffect } from 'react';
+import {
+  Alert,
+  Dimensions,
+  RefreshControl,
+  StyleSheet,
+  View,
+} from 'react-native';
+import { ERROR_ALERT_MESSAGE, ERROR_ALERT_TITLE, LIMIT, ONE_HOUR } from '../constants';
 
 const HEIGHT_OFFSET = 120;
 
 export default function Gallery() {
   const screenHeight = Dimensions.get('screen').height;
   const { containerStyle } = styles(screenHeight - HEIGHT_OFFSET);
+  const { images, setImages } = useImages();
 
-  const {
-    data: images,
-    error,
-    refetch,
-    isLoading,
-    isRefetching,
-  } = useQuery({
-    queryKey: imagesQueryKey,
-    queryFn: getImagesQueryFunction,
+  const { error, refetch, isLoading, isRefetching } = useQuery<
+    GetImagesQueryFunctionResponse,
+    GetImagesQueryFunctionError
+  >({
     staleTime: ONE_HOUR,
+    queryKey: imagesQueryKey,
+    queryFn: getImagesQueryFunction(setImages),
   });
 
   useEffect(() => {
@@ -46,7 +45,7 @@ export default function Gallery() {
   }, [error]);
 
   const renderImage = useCallback(
-    ({ item: { id, download_url } }: { item: ImageProps }) => (
+    ({ item: { id, download_url } }: { item: ImageItem }) => (
       <GalleryImageItem id={id} uri={download_url} />
     ),
     []

@@ -1,10 +1,10 @@
-import { ImageProps } from '@/types';
+import { ImageItem } from '@/store/slices/images';
 import { Link } from 'expo-router';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
 
 interface GalleryImageItemProps {
-  id: ImageProps['id'];
-  uri: ImageProps['download_url'];
+  id: ImageItem['id'];
+  uri: ImageItem['download_url'];
 }
 
 export function GalleryImageItem({ id, uri }: GalleryImageItemProps) {
