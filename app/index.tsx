@@ -8,24 +8,34 @@ import {
 } from '@/queries/get-images';
 import { useImages } from '@/store/hooks/images';
 import { ImageItem } from '@/store/slices/images';
-import { FlashList } from '@shopify/flash-list';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
+import { FlashList } from '@shopify/flash-list';
 import {
   Alert,
   Dimensions,
+  FlatList,
+  Platform,
   RefreshControl,
   StyleSheet,
+  Text,
   View,
 } from 'react-native';
-import { ERROR_ALERT_MESSAGE, ERROR_ALERT_TITLE, LIMIT, ONE_HOUR } from '../constants';
+import {
+  ERROR_ALERT_MESSAGE,
+  ERROR_ALERT_TITLE,
+  GALLERY_OUTER_SPACING,
+  LIMIT,
+  ONE_HOUR,
+} from '../constants';
 
 const HEIGHT_OFFSET = 120;
 
 export default function Gallery() {
-  const screenHeight = Dimensions.get('screen').height;
-  const { containerStyle } = styles(screenHeight - HEIGHT_OFFSET);
   const { images, setImages } = useImages();
+  const screenHeight = Dimensions.get('screen').height;
+  const ListComponent = Platform.OS === 'ios' ? FlashList : FlatList<ImageItem>;
+  const { emptyStyles, containerStyle } = styles(screenHeight - HEIGHT_OFFSET);
 
   const { error, refetch, isLoading, isRefetching } = useQuery<
     GetImagesQueryFunctionResponse,
@@ -53,14 +63,19 @@ export default function Gallery() {
 
   return withLoading(
     <View style={containerStyle}>
-      <FlashList
+      <ListComponent
         data={images}
         numColumns={2}
-        estimatedItemSize={LIMIT}
-        keyExtractor={({ id }) => id}
         renderItem={renderImage}
+        keyExtractor={(item) => item.id}
+        estimatedItemSize={LIMIT}
         refreshControl={
           <RefreshControl refreshing={isRefetching} onRefresh={refetch} />
+        }
+        ListEmptyComponent={
+          <View style={emptyStyles}>
+            <Text>No images to display!</Text>
+          </View>
         }
       />
     </View>
@@ -70,8 +85,11 @@ export default function Gallery() {
 const styles = (height: number) =>
   StyleSheet.create({
     containerStyle: {
-      paddingVertical: 10,
-      paddingHorizontal: 10,
+      paddingVertical: GALLERY_OUTER_SPACING,
+      paddingHorizontal: GALLERY_OUTER_SPACING,
       height,
+    },
+    emptyStyles: {
+      alignItems: 'center',
     },
   });

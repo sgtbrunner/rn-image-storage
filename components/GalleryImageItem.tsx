@@ -1,8 +1,12 @@
-import { BLUR_HASH } from '@/constants';
+import {
+  BLUR_HASH,
+  GALLERY_IMAGE_PADDING,
+  GALLERY_OUTER_SPACING,
+} from '@/constants';
 import { ImageItem } from '@/store/slices/images';
 import { Image } from 'expo-image';
 import { Link } from 'expo-router';
-import { StyleSheet, TouchableOpacity } from 'react-native';
+import { Dimensions, Pressable, StyleSheet } from 'react-native';
 
 interface GalleryImageItemProps {
   id: ImageItem['id'];
@@ -10,27 +14,31 @@ interface GalleryImageItemProps {
 }
 
 export function GalleryImageItem({ id, uri }: GalleryImageItemProps) {
+  const { width: screenWidth } = Dimensions.get('screen');
+  const { containerStyles, imageStyles } = styles(screenWidth);
   return (
-    <TouchableOpacity style={styles.container}>
+    <Pressable style={containerStyles}>
       <Link href={{ pathname: '/details', params: { id } }}>
         <Image
           source={{ uri }}
-          style={styles.image}
+          style={imageStyles}
           cachePolicy='memory-disk'
           placeholder={{ blurhash: BLUR_HASH }}
         />
       </Link>
-    </TouchableOpacity>
+    </Pressable>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    margin: 10,
-  },
-  image: {
-    width: 200,
-    height: 300,
-    borderRadius: 8,
-  },
-});
+const styles = (screenWidth: number) =>
+  StyleSheet.create({
+    containerStyles: {
+      padding: GALLERY_IMAGE_PADDING,
+    },
+    imageStyles: {
+      width:
+        screenWidth / 2 - GALLERY_OUTER_SPACING - 2 * GALLERY_IMAGE_PADDING,
+      height: 300,
+      borderRadius: 8,
+    },
+  });
