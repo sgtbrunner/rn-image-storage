@@ -3,7 +3,7 @@ import { useImages } from '@/store/hooks/images';
 import { ImageBackground } from 'expo-image';
 import { useLocalSearchParams, useNavigation } from 'expo-router';
 import { useEffect } from 'react';
-import { StyleSheet } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
 type ImageDetailsProps = {
   /** Id of the displayed image */
@@ -13,6 +13,8 @@ type ImageDetailsProps = {
 export default function ImageDetails() {
   const { getImage } = useImages();
   const navigation = useNavigation();
+  const { height } = Dimensions.get('screen');
+  const { imageStyle } = styles(height);
   const { id } = useLocalSearchParams<'/details', ImageDetailsProps>();
 
   const image = getImage(id);
@@ -23,7 +25,8 @@ export default function ImageDetails() {
 
   return (
     <ImageBackground
-      style={styles.image}
+      style={imageStyle}
+      contentFit='cover'
       cachePolicy='memory-disk'
       placeholder={{ blurhash: BLUR_HASH }}
       source={{ uri: image?.download_url }}
@@ -31,10 +34,9 @@ export default function ImageDetails() {
   );
 }
 
-const styles = StyleSheet.create({
-  image: {
-    flex: 1,
-    width: '100%',
-    height: '100%',
-  },
-});
+const styles = (height: number) =>
+  StyleSheet.create({
+    imageStyle: {
+      height,
+    },
+  });
