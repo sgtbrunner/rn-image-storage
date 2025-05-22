@@ -1,8 +1,5 @@
 import { useRouter } from 'expo-router';
-import { Button, StyleSheet } from 'react-native';
-
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import { Button, StyleSheet, Text, View } from 'react-native';
 
 export default function NotFoundScreen() {
   const router = useRouter();
@@ -11,15 +8,11 @@ export default function NotFoundScreen() {
 
   return (
     <>
-      <ThemedView style={styles.container}>
-        <ThemedText type='title' style={styles.title}>
-          Oops!
-        </ThemedText>
-        <ThemedText style={styles.subtitle}>
-          This screen does not exist.
-        </ThemedText>
+      <View style={styles.container}>
+        <Text style={styles.title}>Oops!</Text>
+        <Text style={styles.subtitle}>This screen does not exist.</Text>
         <Button title='Go back to where you came from!' onPress={goBack} />
-      </ThemedView>
+      </View>
     </>
   );
 }
