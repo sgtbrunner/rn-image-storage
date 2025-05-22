@@ -18,11 +18,12 @@ Expo was the chosen way to go on this task as it speeds up development quite sig
 ## Screenshots
 
 Android
-https://github.com/sgtbrunner/rn-image-storage/blob/main/assets/videos/android.mp4
+
+https://github.com/user-attachments/assets/010d9d30-ec73-46ec-9b51-f5fe25d4538f
 
 iOS
 
-![iOS](https://github.com/sgtbrunner/rn-image-storage/blob/main/assets/videos/ios.mp4)
+https://github.com/user-attachments/assets/8e9e466c-5631-4f43-bbdd-92d4223d710c
 
 ## Installation
 
